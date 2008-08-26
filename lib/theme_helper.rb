@@ -1,0 +1,3 @@
+# this is here so that Rails doesn't complain about a missing default helper...
+module ThemeHelper
+end
