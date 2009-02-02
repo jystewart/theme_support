@@ -3,9 +3,9 @@ ActionMailer::Base.class_eval do
   
   alias_method :__render, :render
   alias_method :__initialize, :initialize
-
+  
   @current_theme = nil
-
+  
   attr_reader :current_theme
    
   def initialize(method_name=nil, *parameters)
@@ -20,8 +20,26 @@ ActionMailer::Base.class_eval do
   def render(opts)
     body = opts.delete(:body)
     body[:current_theme] = @current_theme
-    opts[:file] = "#{mailer_name}/#{opts[:file]}"
-    initialize_template_class(body).render(opts)
+    if opts[:file] && (opts[:file] !~ /\// && !opts[:file].respond_to?(:render))
+      opts[:file] = "#{mailer_name}/#{opts[:file]}"
+    end
+
+    raise opts[:file].inspect
+
+    begin
+      old_template, @template = @template, initialize_template_class(body)
+      layout = respond_to?(:pick_layout, true) ? pick_layout(opts) : false
+      @template.render(opts.merge(:layout => layout))
+    ensure
+      @template = old_template
+    end
   end
+  # 
+  # def render(opts)
+  #   body = opts.delete(:body)
+  #   body[:current_theme] = @current_theme
+  #   opts[:file] = "#{mailer_name}/#{opts[:file]}"
+  #   initialize_template_class(body).render(opts)
+  # end
    
 end
