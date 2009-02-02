@@ -1,45 +1,93 @@
 # Extend the Base ActionController to support themes
-ActionMailer::Base.class_eval do 
+module ActionMailer
+  class Base
   
-  alias_method :__render, :render
-  alias_method :__initialize, :initialize
+    alias_method :__render, :render
+    alias_method :__initialize, :initialize
   
-  @current_theme = nil
+    @current_theme = nil
   
-  attr_reader :current_theme
+    attr_accessor :current_theme
    
-  def initialize(method_name=nil, *parameters)
-    if parameters[-1].is_a? Hash and (parameters[-1].include? :theme)
-      @current_theme = parameters[-1][:theme]
-      parameters[-1].delete :theme
-      parameters[-1][:current_theme] = @current_theme
-    end
-    create!(method_name, *parameters) if method_name
-  end
-  
-  def render(opts)
-    body = opts.delete(:body)
-    body[:current_theme] = @current_theme
-    if opts[:file] && (opts[:file] !~ /\// && !opts[:file].respond_to?(:render))
-      opts[:file] = "#{mailer_name}/#{opts[:file]}"
+    def initialize(method_name=nil, *parameters)
+      if parameters[-1].is_a? Hash and (parameters[-1].include? :theme)
+        @current_theme = parameters[-1][:theme]
+        parameters[-1].delete :theme
+        parameters[-1][:current_theme] = @current_theme
+      end
+      create!(method_name, *parameters) if method_name
     end
 
-    raise opts[:file].inspect
+    def create!(method_name, *parameters) #:nodoc:
+      initialize_defaults(method_name)
+      __send__(method_name, *parameters)
 
-    begin
-      old_template, @template = @template, initialize_template_class(body)
-      layout = respond_to?(:pick_layout, true) ? pick_layout(opts) : false
-      @template.render(opts.merge(:layout => layout))
-    ensure
-      @template = old_template
+      tpaths = []
+      tpaths << File.join(RAILS_ROOT, "themes", self.current_theme, "views", mailer_name) if self.current_theme
+      tpaths << template_path
+      
+      # If an explicit, textual body has not been set, we check assumptions.
+      unless String === @body
+        # First, we look to see if there are any likely templates that match,
+        # which include the content-type in their file name (i.e.,
+        # "the_template_file.text.html.erb", etc.). Only do this if parts
+        # have not already been specified manually.
+
+        if @parts.empty?
+          
+          tpaths.each do |tpath|
+            Dir.glob("#{tpath}/#{@template}.*").each do |path|
+              template = template_root["#{tpath}/#{File.basename(path)}"]
+
+              # Skip unless template has a multipart format
+              next unless template && template.multipart?
+
+              @parts << Part.new(
+                :content_type => template.content_type,
+                :disposition => "inline",
+                :charset => charset,
+                :body => render_message(template, @body)
+              )
+            end
+            break if @parts.any?
+          end
+          unless @parts.empty?
+            @content_type = "multipart/alternative"
+            @parts = sort_parts(@parts, @implicit_parts_order)
+          end
+        end
+
+        # Then, if there were such templates, we check to see if we ought to
+        # also render a "normal" template (without the content type). If a
+        # normal template exists (or if there were no implicit parts) we render
+        # it.
+        template_exists = @parts.empty?
+        tpaths.each do |tpath|
+          template_exists ||= template_root["#{tpath}/#{@template}"]
+          if template_exists
+            @body = render_message(@template, @body) 
+            break
+          end
+        end
+
+        # Finally, if there are other message parts and a textual body exists,
+        # we shift it onto the front of the parts and set the body to nil (so
+        # that create_mail doesn't try to render it in addition to the parts).
+        if !@parts.empty? && String === @body
+          @parts.unshift Part.new(:charset => charset, :body => @body)
+          @body = nil
+        end
+      end
+
+      # If this is a multipart e-mail add the mime_version if it is not
+      # already set.
+      @mime_version ||= "1.0" if !@parts.empty?
+
+      # build the mail object itself
+      @mail = create_mail
     end
-  end
-  # 
-  # def render(opts)
-  #   body = opts.delete(:body)
-  #   body[:current_theme] = @current_theme
-  #   opts[:file] = "#{mailer_name}/#{opts[:file]}"
-  #   initialize_template_class(body).render(opts)
-  # end
+
+    
    
+  end
 end
