@@ -1,6 +1,11 @@
 This theme_support version has been updated by Damien Le Berrigaud for Rails 2.0
 http://www.webdrivenblog.com/
 
+It was then forked for Rails 2.2 (and later 2.3) support by James Stewart - http://jystewart.net/process/
+
+Some notes on the integration of Rails 2.3 support can be found at:
+http://jystewart.net/process/tag/theme_support/
+
 = Theme Support for Rails Applications
 
 This plugin provides support for themes to the rails application environment. 
