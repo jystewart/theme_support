@@ -32,4 +32,19 @@ ActionController::Base.class_eval do
      end
    end
 
+   alias_method :theme_support_active_layout, :active_layout
+   
+   def active_layout(passed_layout = nil)
+     if current_theme
+       theme_path = File.join(RAILS_ROOT, "themes", controller.current_theme, "views")
+       if File.exists?(theme_path) and ! self.class.view_paths.include?(theme_path)
+         self.class.view_paths.unshift(theme_path)
+         result = theme_support_active_layout(passed_layout)
+         self.class.view_paths.shift
+         return result
+       end
+     end
+     
+     theme_support_active_layout(passed_layout)
+   end
 end
