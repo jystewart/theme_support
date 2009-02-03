@@ -36,7 +36,7 @@ ActionController::Base.class_eval do
    
    def active_layout(passed_layout = nil)
      if current_theme
-       theme_path = File.join(RAILS_ROOT, "themes", controller.current_theme, "views")
+       theme_path = File.join(RAILS_ROOT, "themes", current_theme, "views")
        if File.exists?(theme_path) and ! self.class.view_paths.include?(theme_path)
          self.class.view_paths.unshift(theme_path)
          result = theme_support_active_layout(passed_layout)
