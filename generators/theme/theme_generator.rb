@@ -18,7 +18,7 @@ class ThemeGenerator < Rails::Generator::NamedBase
           # stylesheet
           m.template "theme.css", File.join( "themes", file_name, "stylesheets", "#{file_name}.css" )
           # layouts
-          m.template 'layout.rhtml', File.join( 'themes', file_name, 'layouts', 'default.rhtml' )
+          m.template 'layout.html.erb', File.join( 'themes', file_name, 'views', 'layouts', 'default.html.erb' )
           #m.template 'layout.liquid', File.join( 'themes', file_name, 'layouts', 'default.liquid' )
           # view readme
           m.template 'views_readme', File.join( 'themes', file_name, 'views', 'views_readme.txt' )
