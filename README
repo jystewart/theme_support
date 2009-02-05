@@ -18,6 +18,11 @@ the theme system to ignore any templates except liquid ones.
  * Rake tasks are now namespaced, eg: "rake themes:cache:create" instead of "rake theme_create_cache"
  * Layouts now live within themes/[theme_name]/views/layouts to match up with Rails conventions
 
+== Known Issues
+
+Liquid template handling is not tested in 2.2 or 2.3
+The various asset methods (theme_stylesheet_link_tag etc.) don't work in 2.2
+
 == Usage
 
 This plugin automatically makes any patches needed for theme support. You can
