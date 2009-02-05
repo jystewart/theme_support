@@ -7,8 +7,8 @@ class ThemeGenerator < Rails::Generator::NamedBase
           # theme content folders
           m.directory File.join( "themes", file_name, "images" )
           m.directory File.join( "themes", file_name, "javascript" )
-          m.directory File.join( "themes", file_name, "layouts" )
           m.directory File.join( "themes", file_name, "views" )
+          m.directory File.join( "themes", file_name, "views", "layouts" )
           m.directory File.join( "themes", file_name, "stylesheets" )
           # Default files...
           # about
