@@ -13,6 +13,13 @@ It supports theme specific images, stylesheets, javascripts, and views. The
 views can be in ERb (rhtml) or liquid formats. Optionally, you can configure 
 the theme system to ignore any templates except liquid ones.
 
+== Tests
+
+A test application with a range of cucumber-based tests is available separately at:
+
+http://github.com/jystewart/theme_support_test_app
+
+
 == Changes from the original version
 
  * Rake tasks are now namespaced, eg: "rake themes:cache:create" instead of "rake theme_create_cache"
