@@ -4,6 +4,9 @@ require 'patches/actioncontroller_ex'
 require 'patches/actionmailer_ex'
 require 'patches/routeset_ex'
 
+ActionController::Base.send(:include, ThemeSupport::ControllerExtensions)
+ActionMailer::Base.send(:include, ThemeSupport::ControllerExtensions)
+
 # Add the tag helpers for rhtml and, optionally, liquid templates
 require 'helpers/rhtml_theme_tags'
 

@@ -32,7 +32,12 @@ module ThemeSupport
       attr_accessor :force_liquid_template
       
       # Retrieves the current set theme
-      def current_theme(passed_theme=nil)
+      
+      def current_theme(passed_theme = nil)
+        @current_theme ||= get_current_theme(passed_theme)
+      end
+      
+      def get_current_theme(passed_theme=nil)
         theme = passed_theme || self.class.read_inheritable_attribute("theme")
 
         @active_theme = case theme
@@ -58,6 +63,3 @@ module ThemeSupport
     end
   end
 end
-
-ActionMailer::Base.send(:include, ThemeSupport::ControllerExtensions)
-ActionController::Base.send(:include, ThemeSupport::ControllerExtensions)
