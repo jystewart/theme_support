@@ -5,15 +5,15 @@ class ThemeController < ActionController::Base
   after_filter :cache_theme_files
   
   def stylesheets
-    render_theme_item(:stylesheets, params[:filename].join('/'), params[:theme], 'text/css')
+    render_theme_item(:stylesheets, joined_filename, params[:theme], 'text/css')
   end
 
   def javascript
-    render_theme_item(:javascript, params[:filename].join('/'), params[:theme], 'text/javascript')
+    render_theme_item(:javascript, joined_filename, params[:theme], 'text/javascript')
   end
 
   def images
-    render_theme_item(:images, params[:filename].join('/'), params[:theme])
+    render_theme_item(:images, joined_filename, params[:theme])
   end
 
   def error
@@ -31,6 +31,10 @@ class ThemeController < ActionController::Base
       send_file file_path, :type => mime, :disposition => 'inline', :stream => false
     end
   end
+  
+  def joined_filename
+    params[:filename].join '/'
+  end
 
   def cache_theme_files
     path = request.request_uri
@@ -41,7 +45,6 @@ class ThemeController < ActionController::Base
     end
   end
 
-    
   def mime_for(filename)
     case filename.downcase
     when /\.js$/
