@@ -7,11 +7,17 @@ Some notes on the integration of Rails 2.3 support can be found at:
 http://jystewart.net/process/tag/theme_support/
 
 = Theme Support for Rails Applications
-
-This plugin provides support for themes to the rails application environment. 
+jng
+This plugin provides support for themes to the rails 2.2/2.3 application environment. 
 It supports theme specific images, stylesheets, javascripts, and views. The 
 views can be in ERb (rhtml) or liquid formats. Optionally, you can configure 
 the theme system to ignore any templates except liquid ones.
+
+== Rails 3
+
+This plugin has not been tested on Rails 3, and it won't be. It has been succeeded by
+Lucas Florio's themes_for_rails gem. See http://github.com/lucasefe/themes_for_rails
+for more info
 
 == Tests
 
