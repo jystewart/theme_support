@@ -22,6 +22,6 @@ namespace :themes do
     end
 
     desc "Updates the cached (public) theme folders"
-    task :update => [:theme_remove_cache, :theme_create_cache]
+    task :update => [:remove, :create]
   end
 end
