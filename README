@@ -30,6 +30,7 @@ http://github.com/jystewart/theme_support_test_app
 
  * Rake tasks are now namespaced, eg: "rake themes:cache:create" instead of "rake theme_create_cache"
  * Layouts now live within themes/[theme_name]/views/layouts to match up with Rails conventions
+ * Theme names must be Strings. The Rails 1 version of theme_support allowed anything that could be converted to a string, but this one won't
 
 == Known Issues
 
