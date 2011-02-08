@@ -7,7 +7,7 @@ Some notes on the integration of Rails 2.3 support can be found at:
 http://jystewart.net/process/tag/theme_support/
 
 = Theme Support for Rails Applications
-jng
+
 This plugin provides support for themes to the rails 2.2/2.3 application environment. 
 It supports theme specific images, stylesheets, javascripts, and views. The 
 views can be in ERb (rhtml) or liquid formats. Optionally, you can configure 
@@ -53,7 +53,7 @@ It expects the following theme folder structure.
         stylesheets/
         javascripts/
         views/           <- you can override application views
-          layouts/         <- layout .rhtml or .liquid templates
+          layouts/         <- layout .html.erb templates
         about.markdown
         preview.png
 
@@ -87,7 +87,7 @@ There are other rake tasks available:
 You specify which theme to use in your controller by using the 'theme' helper.
 It's used just like the 'layout' helper. In fact, you can use them both 
 simultaneously. The following will render actions using the 'default' layout 
-in the 'blue_bird' theme (theme/blue_bird/layouts/default.rhtml):
+in the 'blue_bird' theme (theme/blue_bird/layouts/default.html.erb):
 
   class ApplicationController < ActionController::Base
     layout 'default'
@@ -177,7 +177,7 @@ Thanks guys!
         
           Added experimental support for themeing ActionMailer classes.
           They work as normal, if you want to all theme's to override the
-          .rhtml|.liquid views, send the theme in the deliver_* method. For
+          .html.erb views, send the theme in the deliver_* method. For
           example:
         
             Mailer.deliver_signup( user, :theme=>get_theme() )
