@@ -66,7 +66,7 @@ write permissions. This could be a possible security vulnerability.
 With that in mind, it is best to pre-cache all of the theme files by using the 
 included rake tasks:
 
-  $ rake theme_create_cache
+  $ rake themes:cache:create
 
 The theme file cache generates the following file structure:
 
@@ -80,9 +80,9 @@ The theme file cache generates the following file structure:
 
 There are other rake tasks available:
 
- - theme_create_cache
- - theme_remove_cache
- - theme_update_cache
+ - themes:cache:create
+ - rake themes:cache:remove
+ - rake themes:cache:update
 
 You specify which theme to use in your controller by using the 'theme' helper.
 It's used just like the 'layout' helper. In fact, you can use them both 
