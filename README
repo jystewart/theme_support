@@ -80,7 +80,7 @@ The theme file cache generates the following file structure:
 
 There are other rake tasks available:
 
- - themes:cache:create
+ - rake themes:cache:create
  - rake themes:cache:remove
  - rake themes:cache:update
 
