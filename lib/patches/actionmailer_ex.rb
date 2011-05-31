@@ -24,8 +24,12 @@ module ActionMailer
         theme_template_roots[path] = ActionView::Base.process_view_paths(File.dirname(path)).first
       end
       
-      tpaths << File.join(RAILS_ROOT, template_path)
-      theme_template_roots[File.join(RAILS_ROOT, template_path)] = template_root
+      absolute_template_path =
+        Pathname.new(template_path).absolute? ?
+          template_path :
+          File.join(RAILS_ROOT, template_path)
+      tpaths << absolute_template_path
+      theme_template_roots[absolute_template_path] = template_root
 
       # If an explicit, textual body has not been set, we check assumptions.
       unless String === @body
